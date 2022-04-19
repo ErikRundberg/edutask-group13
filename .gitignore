@@ -29,3 +29,6 @@ yarn-error.log*
 
 # database
 data/db/
+
+# assignment folder
+assignments/
