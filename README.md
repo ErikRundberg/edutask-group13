@@ -74,3 +74,10 @@ The following issues are known and may require attention:
 1. The system was built using nodejs 17, which has a [known compatability issue due to its upgrade to OpenSSL3](https://github.com/webpack/webpack/issues/14532#issuecomment-947807590). Check the version of node that you are using and adapt accordingly:
   * v17.0.0 and beyond: in frontend/package.json, the "start" script needs to contain the flag --openssl-legacy-provider 
   * before v17.0.0: remove the --openssl-legacy-provider flag from the "start" script
+2. When starting the MongoDB with `mongod`, make sure to use the path separators appropriate on your operating system.
+3. When using Fedora as your Linux distribution and encountering issues installing mongoDB (student solution): 
+    1. From https://www.mongodb.com/try/download/community, select RedHat / CentOS 8.0 as platform and download the .rpm file
+    2. Go to downloads and execute `sudo dnf install <rpm file>`
+    3. Execute `sudo systemctl enable mongod`, then `sudo systemctl start mongod`
+    4. Delete the file in /tmp which causes errors when tryng to start a new mongodb instance in a dir with `sudo rm /tmp/mongodb-27017.sock` in the terminal
+    5. Then you can finally start up the database in the data/db directory
