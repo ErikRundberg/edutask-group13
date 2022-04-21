@@ -18,4 +18,4 @@ class TestDAO:
         test_dao.delete(obj["_id"]["$oid"])
 
     def test_create_user(self, sut):
-        assert(sut != None)
+        assert DAO("user").findOne(sut["_id"]["$oid"]) == DAO("user").to_json(sut)
