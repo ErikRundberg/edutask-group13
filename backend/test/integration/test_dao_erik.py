@@ -1,8 +1,5 @@
-from unittest.case import _AssertRaisesContext
 import pytest, json
-from asyncio import tasks
 from bson.objectid import ObjectId
-import unittest.mock as mock
 from unittest.mock import patch
 from src.util.dao import DAO
 import pymongo
