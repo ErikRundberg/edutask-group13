@@ -6,6 +6,7 @@ from src.controllers.usercontroller import UserController
 TEST_NAME = "First Name"
 TEST_MAIL = "test@hotmail.com"
 
+@pytest.mark.usercontroller
 class TestUserController:
     @pytest.fixture
     def one_name_uc(self):
