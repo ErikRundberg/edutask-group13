@@ -27,3 +27,8 @@ class TestDAOerik:
         test_json = {"name": "Test", "email": "test@email.com", "tasks": [TASK_OBJECT, TASK_OBJECT]}
         with pytest.raises(pymongo.errors.WriteError):
             sut.create(test_json)
+
+    def test_wrong_validator(self, sut):
+        test_json = {"firstName": "Thor"}
+        with pytest.raises(pymongo.errors.WriteError):
+            sut.create(test_json)
