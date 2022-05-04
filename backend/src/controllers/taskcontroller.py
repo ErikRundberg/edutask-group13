@@ -108,3 +108,32 @@ class TaskController(Controller):
         task['todos'] = todos
 
         return task
+
+    def delete_of_user(self, id: str):
+        """Delete all tasks that are associated to a user with the given ID. This includes each video and all todo items associated to each of the tasks.
+        
+        parameters:
+            id -- the unique identifier of a user object
+            
+        returns:
+            n -- number of deleted tasks
+        
+        raises:
+            Exception -- in case any database operation fails
+        """
+        try:
+            user = self.users_dao.findOne(id)
+            if 'tasks' in user:
+                tasks = self.dao.find(filter={'_id': user['tasks']}, toid=['_id'])
+
+                for task in tasks:
+                    self.videos_dao.delete(id=task['video']['$oid'])
+                    for todo in task['todos']:
+                        self.todos_dao.delete(id=todo['$oid'])
+                    self.dao.delete(id=task['_id']['$oid'])
+
+                return len(tasks)
+            else:
+                return 0
+        except Exception as e:
+            raise

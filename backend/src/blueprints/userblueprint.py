@@ -3,9 +3,11 @@ from flask_cors import cross_origin
 
 from pymongo.errors import WriteError
 
-from src.controllers.usercontroller import UserController
 from src.util.daos import getDao
+from src.controllers.usercontroller import UserController
+from src.controllers.taskcontroller import TaskController
 controller = UserController(getDao(collection_name='user'))
+taskcontroller = TaskController(tasks_dao=getDao(collection_name='task'), videos_dao=getDao(collection_name='video'), todos_dao=getDao(collection_name='todo'), users_dao=getDao(collection_name='user'))
 
 # instantiate the flask blueprint
 user_blueprint = Blueprint('user_blueprint', __name__)
@@ -26,7 +28,7 @@ def create_user():
         abort(500, 'Unknown server error')
 
 # obtain one user by id (and optionally update him)
-@user_blueprint.route('/<id>', methods=['GET', 'PUT'])
+@user_blueprint.route('/<id>', methods=['GET', 'PUT', 'DELETE'])
 @cross_origin()
 def get_user(id):
     try:
@@ -40,6 +42,11 @@ def get_user(id):
             update_result = controller.update(id, data)
             user = controller.get(id)
             return jsonify(user), 200
+        # delete a user
+        elif request.method == 'DELETE':
+            taskcontroller.delete_of_user(id=id)
+            result = controller.delete(id=id)
+            return jsonify({"success": result}), 200
     except Exception as e:
         print(f'{e.__class__.__name__}: {e}')
         abort(500, 'Unknown server error')

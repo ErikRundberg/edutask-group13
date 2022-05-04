@@ -26,6 +26,10 @@ class TodoController(Controller):
                 task = self.tasks_dao.findOne(id=data['taskid'])
                 del data['taskid']
 
+                if 'done' in data:
+                    if isinstance(data['done'], str):
+                        data['done'] = (data['done'].lower() == 'true')
+
                 todo = self.dao.create(data)
                 self.tasks_dao.update(id=task['_id']['$oid'], update_data={'$push' : {'todos': ObjectId(todo['_id']['$oid'])}})
 
