@@ -60,7 +60,6 @@ describe('Logging into the system', () => {
 
     })
 
-
     it('remove todo', () => {
         // find span and click it to remove
         cy.get('.todo-list').find('li').eq(1).find('span').last().click()

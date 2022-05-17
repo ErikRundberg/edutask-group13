@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 describe('Logging into the system', () => {
-    before(function() {
+    beforeEach(function() {
         // create a fabricated user from a fixture
         cy.visit("http://localhost:3000/")
         cy.fixture('user.json')
@@ -48,24 +48,30 @@ describe('Logging into the system', () => {
                 .click()
     })
 
-        
+
     it('create new todo', () => {
-    
+
         cy.get('.todo-list').get(".inline-form").type("Take notes")
         
         cy.get('.todo-list').get(".inline-form").find('input[type=submit]').click()
 
-        cy.get('.todo-list').children().its('length').should('eq', 2)
+        cy.get('.todo-list').children().its('length').should('eq', 3)
+        cy.get('.todo-list').find('li').eq(1).find('span').eq(1).should('contain.text', 'Take notes')
 
         // cy.get('.todo-list').should('have.length', 2)
 
     })
 
-    it("test2", () => {
+    it("failed to create todo", () => {
+        cy.viewport(1920, 1080)
 
+        cy.get('.todo-list').get(".inline-form").find('input[type=submit]').click({force: true})
+
+        cy.get('.todo-list').get(".inline-form").find('input[type=submit]').should('have.css', 'border-color', 'red')
+        cy.get('.todo-list').children().its('length').should('eq', 2)
     })
 
-    after(function() {
+    afterEach(function() {
         // clean up by deleting the user from the database
         cy.request({
             method: 'DELETE',
